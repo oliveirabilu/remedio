@@ -38,6 +38,7 @@ public class RemedioService {
         return new DadosAtualizadosRemedios(remedioAtual);
     }
     //Delete
+    @Transactional
     public void excluir(Long id){
         remedioRepository.deleteById(id);
     }
