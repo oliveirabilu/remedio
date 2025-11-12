@@ -1,0 +1,10 @@
+services:
+  mysql:
+    container_name: 'remedio'
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=Mysqlbiludb'
+      - 'MYSQL_PASSWORD=123'
+      - 'MYSQL_ROOT_PASSWORD=123'
+    ports:
+      - '3306:3306'
