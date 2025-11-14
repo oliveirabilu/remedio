@@ -38,8 +38,9 @@ public class RemedioController {
         return ResponseEntity.noContent().build();
     }
     @DeleteMapping("/{id}")
-    public void excluir(@PathVariable Long id){
+    public ResponseEntity<Void> excluir(@PathVariable Long id){
         remedioService.excluir(id);
+        return ResponseEntity.noContent().build();
 
     }
 
