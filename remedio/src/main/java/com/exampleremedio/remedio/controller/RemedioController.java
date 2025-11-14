@@ -44,4 +44,13 @@ public class RemedioController {
 
     }
 
+    @DeleteMapping("/inativar/{id}")
+    public void inativar(@PathVariable Long id){
+        remedioService.inativar(id);
+    }
+    @PutMapping("/reativar/{id}")
+    public void ativar(@PathVariable Long id){
+        remedioService.ativar(id);
+    }
+
 }
