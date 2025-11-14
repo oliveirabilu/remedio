@@ -25,7 +25,7 @@ public class RemedioService {
     }
     //GetMapping
     public List<DadosListagemRemediosDTO> listarRemedios(){
-       return remedioRepository.findAll()
+       return remedioRepository.findAllByAtivoTrue()
                 .stream()
                 .map(DadosListagemRemediosDTO::new)
                 .toList();
@@ -41,6 +41,16 @@ public class RemedioService {
     @Transactional
     public void excluir(Long id){
         remedioRepository.deleteById(id);
+    }
+    @Transactional
+    public void inativar(Long id){
+        var remedio=remedioRepository.getReferenceById(id);
+        remedio.inativar();
+    }
+    @Transactional
+    public void ativar(Long id){
+        var remedio=remedioRepository.getReferenceById(id);
+        remedio.ativar();
     }
 
 }
