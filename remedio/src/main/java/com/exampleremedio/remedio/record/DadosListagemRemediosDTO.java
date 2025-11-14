@@ -7,6 +7,7 @@ import com.exampleremedio.remedio.entities.Remedio;
 import java.time.LocalDate;
 
 public record DadosListagemRemediosDTO(
+        Boolean ativo,
         Long id,
         String nome,
         Via via,
@@ -16,7 +17,8 @@ public record DadosListagemRemediosDTO(
         Laboratorio laboratorio
 ) {
     public DadosListagemRemediosDTO(Remedio remedio){
-        this(remedio.getId(),
+        this(remedio.getAtivo(),
+                remedio.getId(),
                 remedio.getNome(),
                 remedio.getVia(),
                 remedio.getLote(),
