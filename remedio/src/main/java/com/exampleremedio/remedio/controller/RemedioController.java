@@ -38,12 +38,11 @@ public class RemedioController {
         return ResponseEntity.noContent().build();
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Long id){
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
         remedioService.excluir(id);
         return ResponseEntity.noContent().build();
 
     }
-
     @DeleteMapping("/inativar/{id}")
     public void inativar(@PathVariable Long id){
         remedioService.inativar(id);
