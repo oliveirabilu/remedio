@@ -7,7 +7,11 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.beans.Encoder;
 
 @Configuration
 @EnableWebSecurity
@@ -23,5 +27,9 @@ public class SecurityConfiguration {//será responsável pela configuração de 
     @Bean
     public AuthenticationManager manager(AuthenticationConfiguration configuration) throws  Exception{
         return configuration.getAuthenticationManager();
+    }
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }
