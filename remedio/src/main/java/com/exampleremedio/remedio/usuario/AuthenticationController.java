@@ -9,15 +9,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/login")
 public class AuthenticationController {
-    public AuthenticationController(AuthenticationManager manager) {
-        this.manager = manager;
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
+
+    public AuthenticationController(AuthenticationManager authenticationManager, TokenService tokenService) {
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
-    private final AuthenticationManager manager;
     @PostMapping
     public ResponseEntity<?> efetuarLogin(@RequestBody @Valid DTOlogin dtOlogin){
         var token= new UsernamePasswordAuthenticationToken(dtOlogin.login(), dtOlogin.senha());
-        var autenticacao= manager.authenticate(token);
+        var autenticacao= authenticationManager.authenticate(token);
         return ResponseEntity.ok().build();
 
     }
