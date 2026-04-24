@@ -12,7 +12,8 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, TokenService tokenService) {
+    public AuthenticationController(AuthenticationManager authenticationManager,
+                                    TokenService tokenService) {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
     }
@@ -21,7 +22,7 @@ public class AuthenticationController {
     public ResponseEntity<?> efetuarLogin(@RequestBody @Valid DTOlogin dtOlogin){
         var token= new UsernamePasswordAuthenticationToken(dtOlogin.login(), dtOlogin.senha());
         var autenticacao= authenticationManager.authenticate(token);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(tokenService.gerarToken((Usuario) autenticacao.getPrincipal()));
 
     }
 }
