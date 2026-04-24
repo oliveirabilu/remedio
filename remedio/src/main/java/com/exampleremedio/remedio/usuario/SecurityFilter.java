@@ -13,6 +13,17 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+    var tokenJwt=recuperartoken(request);
+    filterChain.doFilter(request, response);
     }
+
+    private String recuperartoken(HttpServletRequest request) {
+       var authorizationheader= request.getHeader("Autorizacao");
+       if (authorizationheader ==null){
+           throw new RuntimeException("Token não enviado!");
+       }
+       return authorizationheader;
+    }
+
+
 }
