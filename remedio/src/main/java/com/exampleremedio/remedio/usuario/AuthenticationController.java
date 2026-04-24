@@ -22,7 +22,8 @@ public class AuthenticationController {
     public ResponseEntity<?> efetuarLogin(@RequestBody @Valid DTOlogin dtOlogin){
         var token= new UsernamePasswordAuthenticationToken(dtOlogin.login(), dtOlogin.senha());
         var autenticacao= authenticationManager.authenticate(token);
-        return ResponseEntity.ok(tokenService.gerarToken((Usuario) autenticacao.getPrincipal()));
+        var tokenJwt=tokenService.gerarToken((Usuario) autenticacao.getPrincipal());
+        return ResponseEntity.ok(new DadosJwtDto(tokenJwt));
 
     }
 }
