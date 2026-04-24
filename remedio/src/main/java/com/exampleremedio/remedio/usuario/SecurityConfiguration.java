@@ -25,7 +25,7 @@ public class SecurityConfiguration {//será responsável pela configuração de 
                 .build();
     }
     @Bean
-    public AuthenticationManager manager(AuthenticationConfiguration configuration) throws  Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws  Exception{
         return configuration.getAuthenticationManager();
     }
     @Bean
