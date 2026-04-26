@@ -11,9 +11,17 @@ import java.io.IOException;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
+    private final TokenService tokenService;
+
+    public SecurityFilter(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     var tokenJwt=recuperartoken(request);
+    var subject= tokenService.getSubject(tokenJwt);
+
     filterChain.doFilter(request, response);
     }
 
