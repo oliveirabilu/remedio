@@ -12,25 +12,30 @@ import java.io.IOException;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
+    private final UsuarioRepository usuarioRepository;
 
-    public SecurityFilter(TokenService tokenService) {
+    public SecurityFilter(TokenService tokenService, UsuarioRepository usuarioRepository) {
         this.tokenService = tokenService;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     var tokenJwt=recuperartoken(request);
-    var subject= tokenService.getSubject(tokenJwt);
-
+    if (tokenJwt!=null) {
+        var subject = tokenService.getSubject(tokenJwt);
+        var usuario=usuarioRepository.findByLogin(subject);
+    }
     filterChain.doFilter(request, response);
     }
 
     private String recuperartoken(HttpServletRequest request) {
        var authorizationheader= request.getHeader("Autorizacao");
-       if (authorizationheader ==null){
-           throw new RuntimeException("Token não enviado!");
+       if (authorizationheader !=null){
+           return authorizationheader;
        }
-       return authorizationheader;
+       return null;
+
     }
 
 
