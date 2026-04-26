@@ -36,7 +36,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private String recuperartoken(HttpServletRequest request) {
        var authorizationheader= request.getHeader("Autorizacao");
        if (authorizationheader !=null){
-           return authorizationheader;
+           return authorizationheader.replace("Bearer ", "");//retirando o bearer do token
        }
        return null;
 
