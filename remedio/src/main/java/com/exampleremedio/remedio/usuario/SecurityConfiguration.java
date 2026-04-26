@@ -11,12 +11,19 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.beans.Encoder;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {//será responsável pela configuração de segurança
+    private final SecurityFilter securityFilter;
+
+    public SecurityConfiguration(SecurityFilter securityFilter) {
+        this.securityFilter = securityFilter;
+    }
+
     @Bean//se esquecer a anotação não funciona
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
@@ -26,7 +33,8 @@ public class SecurityConfiguration {//será responsável pela configuração de 
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST,"/login").permitAll()
                 .anyRequest().authenticated()
-                .and().build();
+                .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
 
     }
     @Bean
