@@ -8,8 +8,12 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -17,26 +21,28 @@ import java.beans.Encoder;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration {//será responsável pela configuração de segurança
+public class SecurityConfiguration {
     private final SecurityFilter securityFilter;
 
     public SecurityConfiguration(SecurityFilter securityFilter) {
+
         this.securityFilter = securityFilter;
     }
+   @Bean//se esquecer a anotação não funciona
+   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+       http
+               .csrf(csrf -> csrf.disable()) // 🔥 ESSENCIAL
+               .sessionManagement(session -> session
+                       .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+               .authorizeHttpRequests(auth -> auth
+                       .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                       .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+                       .anyRequest().authenticated()
+               )
+               .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
-    @Bean//se esquecer a anotação não funciona
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        return http
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST,"/login").permitAll()
-                .anyRequest().authenticated()
-                .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-
-    }
+       return http.build();
+   }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws  Exception{
         return configuration.getAuthenticationManager();
