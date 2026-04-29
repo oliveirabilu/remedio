@@ -23,23 +23,36 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    var tokenJwt=recuperartoken(request);
-    if (tokenJwt!=null) {
-        var subject = tokenService.getSubject(tokenJwt);
-        var usuario=usuarioRepository.findByLogin(subject);
-        var authentication=new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-    filterChain.doFilter(request, response);
+
+        String uri = request.getRequestURI();
+
+        // 🔥 IGNORA rotas públicas
+        if (uri.equals("/login") || uri.equals("/usuarios")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        var tokenJwt = recuperartoken(request);
+        if (tokenJwt != null) {
+            var subject = tokenService.getSubject(tokenJwt);
+            var usuario = usuarioRepository.findByLogin(subject);
+            var authentication = new UsernamePasswordAuthenticationToken(
+                    usuario,
+                    null,
+                    usuario.getAuthorities()
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+        filterChain.doFilter(request, response);
     }
 
     private String recuperartoken(HttpServletRequest request) {
-       var authorizationheader= request.getHeader("Autorizacao");
-       if (authorizationheader !=null){
-           return authorizationheader.replace("Bearer ", "");//retirando o bearer do token
-       }
-       return null;
+        var authorizationHeader = request.getHeader("Authorization");
 
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.replace("Bearer ", "");
+        }
+
+        return null;
     }
 
 
