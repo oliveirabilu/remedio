@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/login")
 public class AuthenticationController {
+
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
@@ -17,13 +18,20 @@ public class AuthenticationController {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
     }
-
     @PostMapping
-    public ResponseEntity<?> efetuarLogin(@RequestBody @Valid DTOlogin dtOlogin){
-        var token= new UsernamePasswordAuthenticationToken(dtOlogin.login(), dtOlogin.senha());
-        var autenticacao= authenticationManager.authenticate(token);
-        var tokenJwt=tokenService.gerarToken((Usuario) autenticacao.getPrincipal());
-        return ResponseEntity.ok(new DadosJwtDto(tokenJwt));
+    public ResponseEntity<?> efetuarLogin(@RequestBody @Valid DTOlogin dtOlogin) {
 
+        var token = new UsernamePasswordAuthenticationToken(
+                dtOlogin.login(),
+                dtOlogin.senha()
+        );
+
+        var autenticacao = authenticationManager.authenticate(token);
+
+        var user = (org.springframework.security.core.userdetails.User) autenticacao.getPrincipal();
+
+        var tokenJwt = tokenService.gerarToken(user.getUsername());
+
+        return ResponseEntity.ok(new DadosJwtDto(tokenJwt));
     }
-}
+  }
