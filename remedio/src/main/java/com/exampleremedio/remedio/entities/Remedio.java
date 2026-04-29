@@ -39,27 +39,21 @@ public class Remedio {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getNome() {
         return nome;
     }
-
     public void setNome(String nome) {
         this.nome = nome;
     }
-
     public Via getVia() {
         return via;
     }
-
     public void setVia(Via via) {
         this.via = via;
     }
-
     public String getLote() {
         return lote;
     }
