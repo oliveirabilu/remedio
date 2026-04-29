@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_usuarios")
+@Table(name = "usuarios")
 public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +25,7 @@ public class Usuario implements UserDetails {
         this.login = login;
         this.senha = senha;
     }
+
 
     public Long getId() {
         return id;
