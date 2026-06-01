@@ -4,9 +4,12 @@ import com.exampleremedio.remedio.ennumm.Via;
 import com.exampleremedio.remedio.record.DadosAtualizarRemediosDTO;
 import com.exampleremedio.remedio.record.DadosEntradaDTO;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
-
+@Getter
+@Setter
 @Entity
 @Table(name ="TB_REMEDIO")
 public class Remedio {
@@ -34,64 +37,6 @@ public class Remedio {
         this.validade=dados.validade();
         this.laboratorio=dados.laboratorio();
         this.ativo=true;
-    }
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getNome() {
-        return nome;
-    }
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    public Via getVia() {
-        return via;
-    }
-    public void setVia(Via via) {
-        this.via = via;
-    }
-    public String getLote() {
-        return lote;
-    }
-
-    public void setLote(String lote) {
-        this.lote = lote;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public LocalDate getValidade() {
-        return validade;
-    }
-
-    public void setValidade(LocalDate validade) {
-        this.validade = validade;
-    }
-
-    public Laboratorio getLaboratorio() {
-        return laboratorio;
-    }
-
-    public void setLaboratorio(Laboratorio laboratorio) {
-        this.laboratorio = laboratorio;
-    }
-
-    public Boolean getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
     }
 
     public void atualizeRemedios(DadosAtualizarRemediosDTO dados){

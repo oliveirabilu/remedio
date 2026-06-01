@@ -1,5 +1,7 @@
 package com.exampleremedio.remedio.usuario;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,7 +23,10 @@ import java.beans.Encoder;
 
 @Configuration
 @EnableWebSecurity
+@SecurityScheme(name = SecurityConfiguration.SECURITY, type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 public class SecurityConfiguration {
+    public static final String SECURITY = "bearerAuth";
+
     private final SecurityFilter securityFilter;
 
     public SecurityConfiguration(SecurityFilter securityFilter) {
@@ -37,6 +42,7 @@ public class SecurityConfiguration {
                .authorizeHttpRequests(auth -> auth
                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+                       .requestMatchers("/v3/api-docs/**", "swagger-ui/**", "swagger-ui.html").permitAll()
                        .anyRequest().authenticated()
                )
                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
